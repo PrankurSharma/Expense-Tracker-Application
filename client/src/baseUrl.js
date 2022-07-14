@@ -1,0 +1,1 @@
+export const baseUrl = 'https://my-expense-tracker-project.herokuapp.com';
