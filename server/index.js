@@ -65,7 +65,7 @@ app.post('/api/signup', (req, res) => {
 			}
 			res.status(200).json({});
 		})
-	})
+	});
 });
 
 app.post('/api/login', (request, response) => {
@@ -109,7 +109,7 @@ app.get('/api/login', function (request, response) {
 			else{
 				response.send({message: "This account was deleted. So, the request was not completed. Press OK to login/register your account."});
 			}
-		})
+		});
 	}
 	else{
 		response.send({error: "Please login to your account."});
@@ -128,19 +128,16 @@ app.put('/api/forgot', (request, res) => {
 		db.query(sqlSelect, person_id, (error, ress) => {
 			if (ress.length > 0) {
 				db.query(sqlUpdate, [hash, person_id], (err, result) => {
-					if (err) {
+					if (err)
 						console.log(err);
-					}
-					else {
-						res.status(200).json({});
-					}
-				})
+					res.status(200).json({});
+				});
 			}
 			else {
 				res.send({ message: "ID doesn't exist." });
 			}
-		})
-	})
+		});
+	});
 });
 
 app.get('/api/logout', (request, res) => {
@@ -152,46 +149,91 @@ app.get('/api/logout', (request, res) => {
 });
 
 app.post('/api/insert', (request, res) => {
-
+	const amount = request.body.amount;
+	const task = request.body.task;
+	const type = request.body.type;
+	const date = request.body.date;
+	const sqlSelect = "select * from users where person_id = ?";
 	if (request.session.user) {
-		const amount = request.body.amount;
-		const task = request.body.task;
-		const type = request.body.type;
-		const date = request.body.date;
-		const sqlInsert = "insert into money_additions (person_id, trans_id, Amount, Task, Type, added_date) values (?, uuid(), ?, ?, ?, ?)"
-		db.query(sqlInsert, [request.session.user[0].person_id, amount, task, type, date], (err, result) => {
-			if (err) {
-				console.log(err);
+		db.query(sqlSelect, request.session.user[0].person_id, (error, results) => {
+			if(results.length > 0){
+				if(request.session.user[0].password === results[0].password){
+					const sqlInsert = "insert into money_additions (person_id, trans_id, Task, Amount, Type, added_date) values (?, uuid(), ?, ?, ?, ?)";
+					db.query(sqlInsert, [request.session.user[0].person_id, task, amount, type, date], (err, result) => {
+						if (err)
+							console.log(err);
+						res.status(200).json({});
+					});
+				}
+				else{
+					res.send({message: "Logged out."});
+				}
 			}
-			res.status(200).json({});
-		})
+			else{
+				res.send({message: "Account has been deleted."});
+			}
+		});
+	}
+	else{
+		res.send({message: "Please login to continue."});
 	}
 });
 
 app.delete('/api/delete/:trans_id', (request, res) => {
+	const sqlSelect = "select * from users where person_id = ?";
 	if (request.session.user) {
-		const id = request.params.trans_id;
-		const sqlDelete = "delete from money_additions where trans_id = ? and person_id = ?";
-		db.query(sqlDelete, [id, request.session.user[0].person_id], (err, result) => {
-			if (err)
-				console.log(err);
-				res.status(200).json({});
-		})
+		db.query(sqlSelect, request.session.user[0].person_id, (error, results) => {
+			if(results.length > 0){
+				if(request.session.user[0].password === results[0].password){
+					const id = request.params.trans_id;
+					const sqlDelete = "delete from money_additions where trans_id = ? and person_id = ?";
+					db.query(sqlDelete, [id, request.session.user[0].person_id], (err, result) => {
+						if (err)
+							console.log(err);
+						res.status(200).json({});
+					});
+				}
+				else{
+					res.send({message: "Logged out."});
+				}
+			}
+			else{
+				res.send({message: "Account has been deleted."});
+			}
+		});
+	}
+	else{
+		res.send({message: "Please login to continue."});
 	}
 });
 
 app.put('/api/update', (request, res) => {
+	const task_name = request.body.task;
+	const new_amount = request.body.amount;
+	const id = request.body.trans_id;
+	const sqlSelect = "select * from users where person_id = ?";
 	if (request.session.user) {
-		const task_name = request.body.task;
-		const new_amount = request.body.amount;
-		const id = request.body.trans_id;
-		const sqlUpdate = "update money_additions set Task = ?, Amount = ? where trans_id = ? and person_id = ?";
-
-		db.query(sqlUpdate, [task_name, new_amount, id, request.session.user[0].person_id], (err, result) => {
-			if (err)
-				console.log(err);
-			res.status(200).json({});
-		})
+		db.query(sqlSelect, request.session.user[0].person_id, (error, results) => {
+			if(results.length > 0){
+				if(request.session.user[0].password === results[0].password){
+					const sqlUpdate = "update money_additions set Task = ?, Amount = ? where trans_id = ? and person_id = ?";
+					db.query(sqlUpdate, [task_name, new_amount, id, request.session.user[0].person_id], (err, result) => {
+						if (err)
+							console.log(err);
+						res.status(200).json({});
+					});
+				}
+				else{
+					res.send({message: "Logged out."});
+				}
+			}
+			else{
+				res.send({message: "Account has been deleted."});
+			}
+		});
+	}
+	else{
+		res.send({message: "Please login to continue."});
 	}
 });
 
@@ -200,7 +242,7 @@ app.get('/api/getmonthtrans', (request, res) => {
 		const sqlSelect = "select * from money_additions where person_id = ? and month(added_date) = month(now()) and year(added_date) = year(now())";
 		db.query(sqlSelect, request.session.user[0].person_id, (err, result) => {
 			res.send(result);
-		})
+		});
 	}
 });
 
@@ -209,7 +251,7 @@ app.get('/api/getmonthincome', (request, res) => {
 		const sqlSelectTotal = "select sum(Amount) as amTotal from money_additions where Type = 'Income' and person_id = ? and month(added_date) = month(now()) and year(added_date) = year(now())";
 		db.query(sqlSelectTotal, request.session.user[0].person_id, (err, result) => {
 			res.send(result);
-		})
+		});
 	}
 });
 
@@ -218,7 +260,7 @@ app.get('/api/getmonthexpense', (request, res) => {
 		const sqlSelectTotal = "select sum(Amount) as amTotal from money_additions where Type = 'Expense' and person_id = ? and month(added_date) = month(now()) and year(added_date) = year(now())";
 		db.query(sqlSelectTotal, request.session.user[0].person_id, (err, result) => {
 			res.send(result);
-		})
+		});
 	}
 });
 
@@ -227,7 +269,7 @@ app.get('/api/getincome', (request, res) => {
 		const sqlSelect = "select * from money_additions where Type = 'Income' and person_id = ? and month(added_date) = month(now()) and year(added_date) = year(now())";
 		db.query(sqlSelect, request.session.user[0].person_id, (err, result) => {
 			res.send(result);
-		})
+		});
 	}
 });
 app.get('/api/getexpense', (request, res) => {
@@ -235,7 +277,7 @@ app.get('/api/getexpense', (request, res) => {
 		const sqlSelect = "select * from money_additions where Type = 'Expense' and person_id = ? and month(added_date) = month(now()) and year(added_date) = year(now())";
 		db.query(sqlSelect, request.session.user[0].person_id, (err, result) => {
 			res.send(result);
-		})
+		});
 	}
 });
 
@@ -245,7 +287,7 @@ app.get('/api/get', (request, res) => {
 		const sqlSelect = "select * from money_additions where person_id = ?";
 		db.query(sqlSelect, request.session.user[0].person_id, (err, result) => {
 			res.send(result);
-		})
+		});
 	}
 });
 
@@ -254,7 +296,7 @@ app.get('/api/gettotalincome', (request, res) => {
 		const sqlSelectTotal = "select sum(Amount) as amTotal from money_additions where Type = 'Income' and person_id = ?";
 		db.query(sqlSelectTotal, request.session.user[0].person_id, (err, result) => {
 			res.send(result);
-		})
+		});
 	}
 });
 
@@ -263,18 +305,36 @@ app.get('/api/gettotalexpense', (request, res) => {
 		const sqlSelectTotal = "select sum(Amount) as amTotal from money_additions where Type = 'Expense' and person_id = ?";
 		db.query(sqlSelectTotal, request.session.user[0].person_id, (err, result) => {
 			res.send(result);
-		})
+		});
 	}
 });
 
 app.post('/api/filter', (request, res) => {
+	let month = request.body.month;
+	let year = request.body.year;
+	const sqlSelect = "select * from users where person_id = ?";
 	if (request.session.user) {
-		let month = request.body.month;
-		let year = request.body.year;
-		const sqlFilter = "select * from money_additions where person_id = ? and month(added_date) = ? and year(added_date) = ?";
-		db.query(sqlFilter, [request.session.user[0].person_id, month, year], (err, result) => {
-			res.send(result);
-		})
+		db.query(sqlSelect, request.session.user[0].person_id, (error, results) => {
+			if(results.length > 0){
+				if(request.session.user[0].password === results[0].password){
+					const sqlFilter = "select * from money_additions where person_id = ? and month(added_date) = ? and year(added_date) = ?";
+					db.query(sqlFilter, [request.session.user[0].person_id, month, year], (err, result) => {
+						if(err)
+							console.log(err);
+						res.send(result);
+					});
+				}
+				else{
+					res.send({message: "Logged out."});
+				}
+			}
+			else{
+				res.send({message: "Account deleted."});
+			}
+		});
+	}
+	else{
+		res.send({message: "Please login to continue."});
 	}
 });
 
@@ -285,7 +345,7 @@ app.post('/api/filterincome', (request, res) => {
 		const sqlIncome = "select sum(Amount) as amTotal from money_additions where person_id = ? and month(added_date) = ? and year(added_date) = ? and Type = 'Income'";
 		db.query(sqlIncome, [request.session.user[0].person_id, month, year], (err, result) => {
 			res.send(result);
-		})
+		});
 	}
 });
 
@@ -296,10 +356,7 @@ app.post('/api/filterexpense', (request, res) => {
 		const sqlIncome = "select sum(Amount) as amTotal from money_additions where person_id = ? and month(added_date) = ? and year(added_date) = ? and Type = 'Expense'";
 		db.query(sqlIncome, [request.session.user[0].person_id, month, year], (err, result) => {
 			res.send(result);
-		})
-	}
-	else {
-		res.send({ message: "Please login to continue." });
+		});
 	}
 });
 

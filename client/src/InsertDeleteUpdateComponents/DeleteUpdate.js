@@ -1,14 +1,33 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import { baseUrl } from '../baseUrl';
 function DeleteUpdate({ money, handleSmallLoad }) {
     const [new_amount, setnew_amount] = useState("");
     const [new_task, setnew_task] = useState("");
 
+    const navigate = useNavigate();
+
+    const navigateToLogin = () => {
+        navigate('/login');
+    };
+
+    const logout = () => {
+        Axios.get(baseUrl + "/api/logout").then((response) => {
+            navigateToLogin();
+        });
+    }
+
     const deleteTransaction = (trans_id) => {
-        Axios.delete(baseUrl + `/api/delete/${trans_id}`);
-        alert("Transaction deleted successfully.");
-        handleSmallLoad((loading) => !loading);
+        Axios.delete(baseUrl + `/api/delete/${trans_id}`).then((response) => {
+            if(response.data.message){
+                logout();
+            }
+            else{
+                alert("Transaction deleted successfully.");
+                handleSmallLoad((loading) => !loading);
+            }
+        });
     };
 
     const updateTransaction = (trans_id) => {
@@ -17,15 +36,21 @@ function DeleteUpdate({ money, handleSmallLoad }) {
                 trans_id: trans_id,
                 amount: new_amount,
                 task: new_task
+            }).then((response) =>{
+                if(response.data.message){
+                    logout();
+                }
+                else{
+                    alert("Transaction updated successfully.");
+                    handleSmallLoad((loading) => !loading);
+                    setnew_amount("");
+                    setnew_task("");
+                }
             });
-            alert("Transaction updated successfully.");
-            handleSmallLoad((Loading) => !Loading);
         }
         else {
             alert("Please fill both the values in order to update the transaction.");
         }
-        setnew_amount("");
-        setnew_task("");
     };
     return (
         <>
