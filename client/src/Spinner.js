@@ -4,7 +4,7 @@ import ReactLoading from 'react-loading';
 import Axios from "axios";
 import { baseUrl } from './baseUrl';
 
-function Spinner({ handleChange }) {
+function Spinner({ handleChange, fetchDetails }) {
     Axios.defaults.withCredentials = true;
 
     const navigate = useNavigate();
@@ -28,6 +28,7 @@ function Spinner({ handleChange }) {
                 alert(response.data.error);
             }
             else {
+                fetchDetails(response.data[0].person_id, response.data[0].username);
                 handleChange(false);
             }
         })

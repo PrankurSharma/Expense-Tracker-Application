@@ -10,6 +10,8 @@ import TotalExpense from '../ExpenseComponents/TotalExpense';
 import AllTransactionsComponent from '../TransactionComponents/AllTransactionsComponent';
 
 function AllTransactions() {
+	const [user_id, setuser_id] = useState("");
+    const [user_name, setuser_name] = useState("");
 	const [money, set_money] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [smallLoad, setSmallLoad] = useState(true);
@@ -32,6 +34,11 @@ function AllTransactions() {
 		set_money(newValue);
 	}
 
+	function fetchDetails(newValue1, newValue2){
+		setuser_id(newValue1);
+		setuser_name(newValue2);
+	}
+
 	const navigate = useNavigate();
 
 	const navigateToFilterTrans = () => {
@@ -39,12 +46,12 @@ function AllTransactions() {
 	}
 
 	if (loading) {
-		return (<Spinner handleChange={handleChange} />);
+		return (<Spinner handleChange={handleChange} fetchDetails={fetchDetails} />);
 	}
 	else {
 		return (
 			<div className='App'>
-				<Header />
+				<Header user_id={user_id} user_name={user_name} />
 				<h1 className='head'> All Transactions </h1>
 				<TotalIncome smallLoad={smallLoad} />
 				<TotalExpense smallLoad={smallLoad} />

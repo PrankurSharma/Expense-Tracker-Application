@@ -11,6 +11,8 @@ import MonthlyIncome from "../IncomeComponents/MonthlyIncome";
 import MonthlyTransactionsComponent from "../TransactionComponents/MonthlyTransactionsComponent";
 
 function CrudSpeechlyPDF() {
+	const [user_id, setuser_id] = useState("");
+    const [user_name, setuser_name] = useState("");
 	const [monthmoney, setmonth_money] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [smallLoad, setSmallLoad] = useState(true);
@@ -34,6 +36,11 @@ function CrudSpeechlyPDF() {
 		setmonth_money(newValue);
 	}
 
+	function fetchDetails(newValue1, newValue2){
+		setuser_id(newValue1);
+		setuser_name(newValue2);
+	}
+
 	const navigate = useNavigate();
 
 	const navigateToAllTrans = () => {
@@ -45,12 +52,12 @@ function CrudSpeechlyPDF() {
 	}
 
 	if (loading) {
-		return (<Spinner handleChange={handleChange} />);
+		return (<Spinner handleChange={handleChange} fetchDetails={fetchDetails} />);
 	}
 	return (
 		<div className="App">
 			<div className="bg"> </div>
-			<Header />
+			<Header user_id={user_id} user_name={user_name} />
 			<div className="container">
 				<div className="container1">
 					<MonthlyIncome monthmoney={monthmoney} smallLoad={smallLoad} />

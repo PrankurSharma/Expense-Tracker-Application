@@ -9,8 +9,8 @@ function Forgot() {
   const [newpassword, setnew_password] = useState("");
 
   const navigate = useNavigate();
-  const navigateToLogin = () => {
-    navigate('/login');
+  const navigateToMain = () => {
+    navigate('/');
   };
 
   const handleSubmit = () => {
@@ -21,7 +21,7 @@ function Forgot() {
       }).then((response) => {
         if (!response.data.message) {
           alert("Password updated successfully.");
-          navigateToLogin();
+          navigateToMain();
         }
         else {
           alert(response.data.message);
