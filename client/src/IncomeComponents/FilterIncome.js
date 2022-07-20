@@ -1,17 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Axios from 'axios';
 import { baseUrl } from '../baseUrl';
 
 function FilterIncome({ smallLoad, month, year }) {
+    const isMounted = useRef(false);
     const [filter_income, setfilter_income] = useState("");
     useEffect(() => {
-        if (month && year) {
-            Axios.post(baseUrl + "/api/filterincome", {
-                month: month,
-                year: year
-            }).then((response) => {
-                setfilter_income(response.data[0].amTotal);
-            });
+        if(isMounted.current){
+            if (month !== "month" && year !== "year") {
+                Axios.post(baseUrl + "/api/filterincome", {
+                    month: month,
+                    year: year
+                }).then((response) => {
+                    setfilter_income(response.data[0].amTotal);
+                });
+            }
+        }
+        else{
+            isMounted.current = true;
         }
     }, [smallLoad]);
 

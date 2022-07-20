@@ -12,8 +12,8 @@ import FilterTransactionsComponent from '../TransactionComponents/FilterTransact
 function FilterTransactions() {
     const [user_id, setuser_id] = useState("");
     const [user_name, setuser_name] = useState("");
-    const [month, set_month] = useState("");
-    const [year, set_year] = useState("");
+    const [month, set_month] = useState("month");
+    const [year, set_year] = useState("year");
     const [money, set_money] = useState([]);
     const [loading, setLoading] = useState(true);
     const [smallLoad, setSmallLoad] = useState(true);
