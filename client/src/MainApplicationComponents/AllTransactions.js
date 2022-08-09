@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import Header from '../Header';
 import Spinner from "../Spinner";
@@ -39,12 +38,6 @@ function AllTransactions() {
 		setuser_name(newValue2);
 	}
 
-	const navigate = useNavigate();
-
-	const navigateToFilterTrans = () => {
-		navigate('/filtertransactions');
-	}
-
 	if (loading) {
 		return (<Spinner handleChange={handleChange} fetchDetails={fetchDetails} />);
 	}
@@ -52,25 +45,26 @@ function AllTransactions() {
 		return (
 			<div className='App'>
 				<Header user_id={user_id} user_name={user_name} />
-				<h1 className='head'> All Transactions </h1>
-				<TotalIncome smallLoad={smallLoad} />
-				<TotalExpense smallLoad={smallLoad} />
 				<div>
-					<h1 className='head'> Transaction Results </h1>
-				</div>
-				<AllTransactionsComponent smallLoad={smallLoad} updateMoney={updateMoney} />
-				{!money.length ? <div> <h1 className='head'> No transactions found. </h1> </div> :
-					<div className="containertrans">
-						<div className="alltransactions">
-							<DeleteUpdate money={money} handleSmallLoad={handleSmallLoad} />
-						</div>
-					</div>}
-				<div>
-					{!money.length ? null : <button className="button" onClick={() => {
-						genPDFSubmit((called) => !called);
-					}}> Generate PDF For All Transactions </button>}
-					{pdfcalled && <JSPDFGenerator money={money} genPDFSubmit={genPDFSubmit} />}
-					<button className='button' onClick={navigateToFilterTrans}> Filter Transactions By Month And Year </button>
+					<h1 className='head'> All Transactions </h1>
+					<TotalIncome smallLoad={smallLoad} />
+					<TotalExpense smallLoad={smallLoad} />
+					<div>
+						<h1 className='head'> Transaction Results </h1>
+					</div>
+					<AllTransactionsComponent smallLoad={smallLoad} updateMoney={updateMoney} />
+					{!money.length ? <div> <h1 className='head'> No transactions found. </h1> </div> :
+						<div className="containertrans">
+							<div className="alltransactions">
+								<DeleteUpdate money={money} handleSmallLoad={handleSmallLoad} />
+							</div>
+						</div>}
+					<div>
+						{!money.length ? null : <button className="button" onClick={() => {
+							genPDFSubmit((called) => !called);
+						}}> Generate PDF For All Transactions </button>}
+						{pdfcalled && <JSPDFGenerator money={money} genPDFSubmit={genPDFSubmit} />}
+					</div>
 				</div>
 			</div>
 		);

@@ -76,7 +76,7 @@ function Login() {
                   set_password(e.target.value);
                 }} placeholder="Password" />
             </div>
-            <Link to="/forgot" className="link">Forgot Your Password?</Link>
+            <Link to="/changepassword" className="link">Forgot Your Password?</Link>
           </div>
           <div className="action">
             <button className='button1' onClick={navigateToSignup}> Register an account </button>

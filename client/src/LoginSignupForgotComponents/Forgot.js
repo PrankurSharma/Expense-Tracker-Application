@@ -44,6 +44,9 @@ function Forgot() {
       </Link>
       <div>
         <h1> Change Password </h1>
+        <div className='warn'>
+          <h6> Note: After changing the password, you will get logged out of your account if already logged in. </h6>
+        </div>
         <div className="content">
           <div className="input-field">
             <input type="text"
