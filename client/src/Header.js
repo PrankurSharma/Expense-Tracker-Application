@@ -8,7 +8,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Axios from "axios";
 import { baseUrl } from "./baseUrl";
 
-function Header({ user_id, user_name }) {
+function Header({ user_id, user_name, handleChange }) {
     Axios.defaults.withCredentials = true;
 
     const navigate = useNavigate();
@@ -19,10 +19,24 @@ function Header({ user_id, user_name }) {
 
     const logout = () => {
         Axios.get(baseUrl + "/api/logout").then((response) => {
-            alert("Please click OK to proceed logging out.");
             navigateToLogin();
         });
     }
+    const deleteAccount = (userId) => {
+        var ans = window.confirm("Are you sure you want to delete your account? All the information stored will be lost.");
+        if(ans){
+            Axios.delete(baseUrl + `/api/deleteuser/${userId}`).then((response) => {
+                if(response.data.message){
+                    logout();
+                }
+                else{
+                    alert("Account deleted successfully. You will be redirected to login page.");
+                    handleChange((loading) => !loading);
+                }
+            });
+        }
+    }
+    
     return (
         <div className="divhead">
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" fixed="top">
@@ -52,7 +66,7 @@ function Header({ user_id, user_name }) {
                         </LinkContainer>
                     </Nav>
                     <Nav>
-                    <NavDropdown title="Account Information">
+                    <NavDropdown title="Account Settings">
                         <NavDropdown.Item disabled> {user_name} : {user_id} </NavDropdown.Item>
                         <LinkContainer to="/changepassword">
                             <NavDropdown.Item> Change Password </NavDropdown.Item>
@@ -60,6 +74,9 @@ function Header({ user_id, user_name }) {
                         <NavDropdown.Item onClick={() => {
                             logout();
                         }}> Logout </NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => {
+                            deleteAccount(user_id);
+                        }}> Delete Account </NavDropdown.Item>
                   </NavDropdown>
                     </Nav>
                     </Navbar.Collapse>

@@ -55,7 +55,7 @@ function FilterTransactions() {
     else {
         return (
             <div className='App'>
-                <Header user_id={user_id} user_name={user_name} />
+                <Header user_id={user_id} user_name={user_name} handleChange={handleChange} />
                 <div>
                     <h1 className='head'> Filter Transactions </h1>
                     <div>

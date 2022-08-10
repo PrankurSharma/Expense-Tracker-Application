@@ -148,6 +148,34 @@ app.get('/api/logout', (request, res) => {
 	}
 });
 
+app.delete('/api/deleteuser/:userId', (request, res) => {
+	const sqlSelect = "select * from users where person_id = ?";
+	if (request.session.user) {
+		db.query(sqlSelect, request.session.user[0].person_id, (error, results) => {
+			if(results.length > 0){
+				if(request.session.user[0].password === results[0].password){
+					const id = request.params.userId;
+					const sqlDelete = "delete from users where person_id = ? and password = ?";
+					db.query(sqlDelete, [id, request.session.user[0].password], (err, result) => {
+						if (err)
+							console.log(err);
+						res.status(200).json({});
+					});
+				}
+				else{
+					res.send({message: "Logged out."});
+				}
+			}
+			else{
+				res.send({message: "Account has been already deleted."});
+			}
+		});
+	}
+	else{
+		res.send({message: "Please login to continue."});
+	}
+})
+
 app.post('/api/insert', (request, res) => {
 	const amount = request.body.amount;
 	const task = request.body.task;
