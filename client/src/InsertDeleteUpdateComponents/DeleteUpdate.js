@@ -56,7 +56,7 @@ function DeleteUpdate({ money, handleSmallLoad }) {
         <>
             {money.map((val) => {
                 return (
-                    <div className="card">
+                    <div className="maincard">
                         <h1 className="heading"> {val.Task} </h1>
                         <h2 className="heading"> ID: {val.trans_id} </h2>
                         <h3 className="heading"> Amount: ₹ {val.Amount} <span> Type: {val.Type} </span> </h3>

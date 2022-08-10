@@ -96,7 +96,7 @@ body {
 
 .form input,
 #type {
-	height: auto;
+	height: 35px;
 	width: 90%;
 	font-size: 25px;
 }
@@ -130,13 +130,13 @@ body {
 	cursor: pointer;
 }
 
-.card {
+.maincard {
 	width: auto;
 	height: auto;
 	border: 2px solid whitesmoke;
 	border-radius: 15px;
-	margin: 10px;
 	background-color: black;
+	margin: 10px;
 	opacity: 0.5;
 }
 
