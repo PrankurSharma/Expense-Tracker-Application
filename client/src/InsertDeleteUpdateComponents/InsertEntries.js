@@ -5,7 +5,7 @@ import { PushToTalkButton, BigTranscript, ErrorPanel } from '@speechly/react-ui'
 import { useSpeechContext } from '@speechly/react-client';
 import { baseUrl } from "../baseUrl";
 
-function InsertEntries({ handleSmallLoad }) {
+function InsertEntries({ handleSmallLoad, fetchData }) {
 
     const [amount, set_amount] = useState("");
     const [task, set_task] = useState("");
@@ -39,6 +39,7 @@ function InsertEntries({ handleSmallLoad }) {
                 else{
                     alert("Record inserted successfully.");
                     handleSmallLoad((loading) => !loading);
+                    fetchData((fetches) => !fetches);
                     set_amount("");
                     set_task("");
                     set_type("");

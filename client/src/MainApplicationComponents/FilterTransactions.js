@@ -17,6 +17,8 @@ function FilterTransactions() {
     const [loading, setLoading] = useState(true);
     const [smallLoad, setSmallLoad] = useState(true);
     const [pdfcalled, setPdfCalled] = useState(false);
+    const [fetched, set_fetched] = useState(false);
+
     Axios.defaults.withCredentials = true;
 
     function handleChange(newValue) {
@@ -39,6 +41,10 @@ function FilterTransactions() {
 		setuser_id(newValue1);
 		setuser_name(newValue2);
 	}
+
+    function fetchData(newValue){
+        set_fetched(newValue);
+    }
 
     let maxOffset = 60;
     let thisYear = (new Date()).getFullYear();
@@ -96,7 +102,7 @@ function FilterTransactions() {
                         {!money.length ? <div> <h1 className='head'> No transactions found. </h1> </div> :
                             <div className='containertrans'>
                                 <div className='alltransactions'>
-                                    <DeleteUpdate money={money} handleSmallLoad={handleSmallLoad} />
+                                    <DeleteUpdate money={money} handleSmallLoad={handleSmallLoad} fetchData={fetchData}/>
                                 </div>
                             </div>}
                     </div>

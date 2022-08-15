@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import { baseUrl } from '../baseUrl';
-function DeleteUpdate({ money, handleSmallLoad }) {
+function DeleteUpdate({ money, handleSmallLoad, fetchData }) {
     const [new_amount, setnew_amount] = useState("");
     const [new_task, setnew_task] = useState("");
 
@@ -26,6 +26,7 @@ function DeleteUpdate({ money, handleSmallLoad }) {
             else{
                 alert("Transaction deleted successfully.");
                 handleSmallLoad((loading) => !loading);
+                fetchData((fetches) => !fetches);
             }
         });
     };
@@ -43,6 +44,7 @@ function DeleteUpdate({ money, handleSmallLoad }) {
                 else{
                     alert("Transaction updated successfully.");
                     handleSmallLoad((loading) => !loading);
+                    fetchData((fetches) => !fetches);
                     setnew_amount("");
                     setnew_task("");
                 }

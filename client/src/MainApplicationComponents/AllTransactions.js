@@ -15,6 +15,7 @@ function AllTransactions() {
 	const [loading, setLoading] = useState(true);
 	const [smallLoad, setSmallLoad] = useState(true);
 	const [pdfcalled, setPdfCalled] = useState(false);
+	const [fetched, set_fetched] = useState(false);
 	Axios.defaults.withCredentials = true;
 
 	function handleChange(newValue) {
@@ -38,6 +39,10 @@ function AllTransactions() {
 		setuser_name(newValue2);
 	}
 
+	function fetchData(newValue){
+		set_fetched(newValue);
+	}
+
 	if (loading) {
 		return (<Spinner handleChange={handleChange} fetchDetails={fetchDetails} />);
 	}
@@ -47,16 +52,16 @@ function AllTransactions() {
 				<Header user_id={user_id} user_name={user_name} handleChange={handleChange}/>
 				<div>
 					<h1 className='head'> All Transactions </h1>
-					<TotalIncome smallLoad={smallLoad} />
-					<TotalExpense smallLoad={smallLoad} />
+					<TotalIncome smallLoad={smallLoad} fetchData={fetchData} fetched={fetched} />
+					<TotalExpense smallLoad={smallLoad} fetchData={fetchData} fetched={fetched} />
 					<div>
 						<h1 className='head'> Transaction Results </h1>
 					</div>
-					<AllTransactionsComponent smallLoad={smallLoad} updateMoney={updateMoney} />
+					<AllTransactionsComponent smallLoad={smallLoad} updateMoney={updateMoney} fetchData={fetchData} fetched={fetched} />
 					{!money.length ? <div> <h1 className='head'> No transactions found. </h1> </div> :
 						<div className="containertrans">
 							<div className="alltransactions">
-								<DeleteUpdate money={money} handleSmallLoad={handleSmallLoad} />
+								<DeleteUpdate money={money} handleSmallLoad={handleSmallLoad} fetchData={fetchData} />
 							</div>
 						</div>}
 					<div>

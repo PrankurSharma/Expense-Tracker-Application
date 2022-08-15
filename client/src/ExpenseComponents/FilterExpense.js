@@ -4,7 +4,7 @@ import { baseUrl } from '../baseUrl';
 
 function FilterExpense({ smallLoad, month, year }) {
     const isMounted = useRef(false);
-    const [filter_expense, setfilter_expense] = useState("");
+    const [filter_expense, setfilter_expense] = useState("0");
     useEffect(() => {
         if(isMounted.current){
             if(month !== "month" && year !== "year"){

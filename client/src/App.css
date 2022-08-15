@@ -30,6 +30,13 @@ body {
 	justify-content: center;
 }
 
+.loading-bars {
+	display: flex;
+	margin: auto;
+	align-items: center;
+	justify-content: center;
+}
+
 .container {
 	display: flex;
 	justify-content: center;
