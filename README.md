@@ -1,5 +1,5 @@
 # Expense-Tracker-Application
-Thank you for visiting our MERN Stack Application.
+Thank you for visiting this MERN Stack Application.
 
 For checking out deployed website, please visit the link: https://finer.netlify.app
 
