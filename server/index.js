@@ -177,6 +177,7 @@ app.delete('/api/deleteuser/:userId', (request, res) => {
 })
 
 app.post('/api/insert', (request, res) => {
+	const id = request.body.id;
 	const amount = request.body.amount;
 	const task = request.body.task;
 	const type = request.body.type;
@@ -186,8 +187,8 @@ app.post('/api/insert', (request, res) => {
 		db.query(sqlSelect, request.session.user[0].person_id, (error, results) => {
 			if(results.length > 0){
 				if(request.session.user[0].password === results[0].password){
-					const sqlInsert = "insert into money_additions (person_id, trans_id, Task, Amount, Type, added_date) values (?, uuid(), ?, ?, ?, ?)";
-					db.query(sqlInsert, [request.session.user[0].person_id, task, amount, type, date], (err, result) => {
+					const sqlInsert = "insert into money_additions (person_id, trans_id, Task, Amount, Type, added_date) values (?, ?, ?, ?, ?, ?)";
+					db.query(sqlInsert, [request.session.user[0].person_id, id, task, amount, type, date], (err, result) => {
 						if (err)
 							console.log(err);
 						res.status(200).json({});

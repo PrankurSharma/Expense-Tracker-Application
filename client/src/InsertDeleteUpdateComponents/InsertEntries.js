@@ -4,9 +4,12 @@ import Axios from "axios";
 import { PushToTalkButton, BigTranscript, ErrorPanel } from '@speechly/react-ui';
 import { useSpeechContext } from '@speechly/react-client';
 import { baseUrl } from "../baseUrl";
+import uuid from 'react-uuid';
 
-function InsertEntries({ handleSmallLoad, fetchData }) {
+function InsertEntries({ user_id, handleSmallLoad, setMoney }) {
 
+    const id = uuid().slice(0, 7);
+    const [isinserted, set_isinserted] = useState(false);
     const [amount, set_amount] = useState("");
     const [task, set_task] = useState("");
     const [type, set_type] = useState("");
@@ -28,6 +31,7 @@ function InsertEntries({ handleSmallLoad, fetchData }) {
     const submitEntries = () => {
         if (amount && task && type && date && (type === "Income" || type === "Expense" || type === "INCOME" || type === "EXPENSE" || type === "income" || type === "expense")) {
             Axios.post(baseUrl + "/api/insert", {
+                id: id,
                 amount: amount,
                 task: task,
                 type: type,
@@ -39,7 +43,7 @@ function InsertEntries({ handleSmallLoad, fetchData }) {
                 else{
                     alert("Record inserted successfully.");
                     handleSmallLoad((loading) => !loading);
-                    fetchData((fetches) => !fetches);
+                    set_isinserted((val) => !val);
                     set_amount("");
                     set_task("");
                     set_type("");
@@ -54,6 +58,10 @@ function InsertEntries({ handleSmallLoad, fetchData }) {
             alert("Please fill all the details in order to proceed.");
         }
     };
+
+    useEffect(() => {
+        setMoney({person_id: user_id, trans_id: id, Amount: amount, Task: task, Type: type, added_date: date});
+    }, [isinserted]);
 
     useEffect(() => {
         if (segment) {

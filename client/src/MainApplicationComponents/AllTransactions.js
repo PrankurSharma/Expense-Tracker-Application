@@ -15,7 +15,6 @@ function AllTransactions() {
 	const [loading, setLoading] = useState(true);
 	const [smallLoad, setSmallLoad] = useState(true);
 	const [pdfcalled, setPdfCalled] = useState(false);
-	const [fetched, set_fetched] = useState(false);
 	Axios.defaults.withCredentials = true;
 
 	function handleChange(newValue) {
@@ -34,13 +33,23 @@ function AllTransactions() {
 		set_money(newValue);
 	}
 
+	function delsetMoney(newValue) {
+		set_money(money.filter((val) => (val.trans_id !== newValue)));
+	}
+
+	function upsetMoney(newValue1, newValue2, newValue3) {
+		const newState = money.map((val) => {
+			if(val.trans_id === newValue1) {
+				return {...val, Amount: newValue2, Task: newValue3}
+			}
+			return val;
+		});
+		set_money(newState);
+	}
+
 	function fetchDetails(newValue1, newValue2){
 		setuser_id(newValue1);
 		setuser_name(newValue2);
-	}
-
-	function fetchData(newValue){
-		set_fetched(newValue);
 	}
 
 	if (loading) {
@@ -52,16 +61,16 @@ function AllTransactions() {
 				<Header user_id={user_id} user_name={user_name} handleChange={handleChange}/>
 				<div>
 					<h1 className='head'> All Transactions </h1>
-					<TotalIncome smallLoad={smallLoad} fetchData={fetchData} fetched={fetched} />
-					<TotalExpense smallLoad={smallLoad} fetchData={fetchData} fetched={fetched} />
+					<TotalIncome smallLoad={smallLoad} />
+					<TotalExpense smallLoad={smallLoad} />
 					<div>
 						<h1 className='head'> Transaction Results </h1>
 					</div>
-					<AllTransactionsComponent smallLoad={smallLoad} updateMoney={updateMoney} fetchData={fetchData} fetched={fetched} />
+					<AllTransactionsComponent smallLoad={smallLoad} updateMoney={updateMoney} />
 					{!money.length ? <div> <h1 className='head'> No transactions found. </h1> </div> :
 						<div className="containertrans">
 							<div className="alltransactions">
-								<DeleteUpdate money={money} handleSmallLoad={handleSmallLoad} fetchData={fetchData} />
+								<DeleteUpdate money={money} handleSmallLoad={handleSmallLoad} delsetMoney={delsetMoney} upsetMoney={upsetMoney} />
 							</div>
 						</div>}
 					<div>

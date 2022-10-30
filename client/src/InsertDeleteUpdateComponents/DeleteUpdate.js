@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import { baseUrl } from '../baseUrl';
-function DeleteUpdate({ money, handleSmallLoad, fetchData }) {
+function DeleteUpdate({ money, handleSmallLoad, delsetMoney, upsetMoney }) {
     const [new_amount, setnew_amount] = useState("");
     const [new_task, setnew_task] = useState("");
+    const [isdeleted, set_isdeleted] = useState(false);
+    const [isupdated, set_isupdated] = useState(false);
+    const [deltransid, set_deltransid] = useState("");
+    const [uptransid, set_uptransid] = useState("");
 
     const navigate = useNavigate();
 
@@ -19,19 +23,25 @@ function DeleteUpdate({ money, handleSmallLoad, fetchData }) {
     }
 
     const deleteTransaction = (trans_id) => {
+        set_deltransid(trans_id);
         Axios.delete(baseUrl + `/api/delete/${trans_id}`).then((response) => {
             if(response.data.message){
                 logout();
             }
             else{
                 alert("Transaction deleted successfully.");
+                set_isdeleted((val) => !val);
                 handleSmallLoad((loading) => !loading);
-                fetchData((fetches) => !fetches);
             }
         });
     };
 
+    useEffect(() => {
+        delsetMoney(deltransid);
+    }, [isdeleted]);
+
     const updateTransaction = (trans_id) => {
+        set_uptransid(trans_id);
         if (new_amount && new_task) {
             Axios.put(baseUrl + "/api/update", {
                 trans_id: trans_id,
@@ -43,8 +53,8 @@ function DeleteUpdate({ money, handleSmallLoad, fetchData }) {
                 }
                 else{
                     alert("Transaction updated successfully.");
+                    set_isupdated((val) => !val);
                     handleSmallLoad((loading) => !loading);
-                    fetchData((fetches) => !fetches);
                     setnew_amount("");
                     setnew_task("");
                 }
@@ -54,6 +64,11 @@ function DeleteUpdate({ money, handleSmallLoad, fetchData }) {
             alert("Please fill both the values in order to update the transaction.");
         }
     };
+
+    useEffect(() => {
+        upsetMoney(uptransid, new_amount, new_task);
+    }, [isupdated]);
+
     return (
         <>
             {money.map((val) => {
