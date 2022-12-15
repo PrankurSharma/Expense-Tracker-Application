@@ -1,8 +1,6 @@
 # Expense-Tracker-Application
 Thank you for visiting this MERN Stack Application.
 
-For checking out deployed website, please visit the link: https://finer.netlify.app
-
 In order to run the above files on your system(in development mode), 
 1. Please replace the part: https://finer.netlify.app with http://localhost:3000 in index.js of server folder.
 2. Replace the part: https://my-expense-tracker-project.herokuapp.com with http://localhost:3001 in all the files of client/src folder.
