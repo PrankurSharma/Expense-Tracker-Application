@@ -3,7 +3,7 @@ Thank you for visiting this MERN Stack Application.
 
 In order to run the above files on your system(in development mode), 
 1. Please replace the part: https://finer.netlify.app with http://localhost:3000 in index.js of server folder.
-2. Replace the part: https://my-expense-tracker-project.herokuapp.com with http://localhost:3001 in all the files of client/src folder.
+2. Replace the part: https://expense-tracker-backend-4gsv.onrender.com with http://localhost:3001 in all the files of client/src folder.
    Please note that only the above part of the links must be replaced by the given link. The rest of the link will remain as it is.(i.e. /api/...  part will remain as it is appended after the newly replaced link).
 3. Replace the lines: process.env.--- (except for process.env.PORT) in index.js of server folder with the values you are using for those fields.
 4. There are 2 mysql database schemas used in this project namely: users & money_additions.
