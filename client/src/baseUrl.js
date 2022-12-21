@@ -1,1 +1,1 @@
-export const baseUrl = 'https://my-expense-tracker-project.herokuapp.com';
+export const baseUrl = 'https://expense-tracker-backend-4gsv.onrender.com';
